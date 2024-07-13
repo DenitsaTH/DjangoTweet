@@ -1,0 +1,74 @@
+### REGISTER
+
+POST http://127.0.0.1:8000/register/
+Content-Type: application/json
+
+{"email": "some_user@gmail.com", "password": "somepass"}
+
+
+### LOGIN
+
+POST http://127.0.0.1:8000/login/
+Content-Type: application/json
+
+{"email": "some_user@gmail.com", "password": "somepass"}
+
+
+### LOGOUT
+
+POST http://127.0.0.1:8000/logout/
+Authorization: Token d48349a1932ab38a6d7df4c97ad37b15a79c9af0
+Content-Type: application/json
+
+{"email": "some_user@gmail.com", 
+"password": "somepass"}
+
+
+### UPDATE PROFILE
+
+PATCH http://127.0.0.1:8000/users/profile/
+Authorization: Token 872191290ec62fa7be915af320ed69301741a675
+Content-Type: application/json
+
+{
+  "first_name": "Deni",
+  "last_name": "Hristova",
+  "description": "Some bio"
+}
+
+
+### SUBMIT POST
+
+POST http://127.0.0.1:8000/posts/
+Authorization: Token ab7725b6662a84f4e6c2ed113060eb09082d0921
+Content-Type: application/json
+
+{"content": "goodbye12356678"}
+
+
+### GET TOTAL POSTS AND LIKES
+
+GET http://127.0.0.1:8000/users/posts/
+Authorization: Token d893d2335cfdb7fbd7a122614b129834abdfb2bb
+Content-Type: application/json
+
+
+### LIKE / UNLIKE A POST
+
+PUT http://127.0.0.1:8000/posts/2/likes/
+Authorization: Token d893d2335cfdb7fbd7a122614b129834abdfb2bb
+Content-Type: application/json
+
+
+### DELETE POST
+
+DELETE http://127.0.0.1:8000/users/posts/15/
+Authorization: Token ab7725b6662a84f4e6c2ed113060eb09082d0921
+Content-Type: application/json
+
+
+### GET ALL POSTS
+
+GET http://127.0.0.1:8000/home/?pages=1&items_per_page=10
+Authorization: Token ab7725b6662a84f4e6c2ed113060eb09082d0921
+Content-Type: application/json
