@@ -72,14 +72,14 @@ def get_posts(request):
                         status=status.HTTP_400_BAD_REQUEST)
     
     posts, has_next = get_all_posts(pages, items_per_page)
-    posts_serialized = PostSerializer(posts, many=True).data
+    posts_serialized = PostSerializer(posts, many=True).data  # serialize from Django db Model instance to native Python data types
 
     data = {
             'posts': posts_serialized,
             'has_next': has_next,
         }
 
-    return Response(data)
+    return Response(data)  # Response() handles JSON rendering
 
 
 @swagger_auto_schema(method='post', tags=['posts'], request_body=SubmitPostSerialized)
