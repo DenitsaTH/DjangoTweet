@@ -8,6 +8,7 @@ from posts.models import Post
 
 ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png']
 
+
 def create_user(serializer, email, password) -> bool:
 
     try:
@@ -24,7 +25,7 @@ def create_user(serializer, email, password) -> bool:
 
 
 def upload_profile_picture(profile_picture, user) -> None:
-    
+
     if profile_picture:
         if profile_picture.content_type not in ALLOWED_IMAGE_TYPES:
             raise ValidationError("Only JPEG and PNG images are allowed.")
@@ -43,8 +44,9 @@ def upload_profile_picture(profile_picture, user) -> None:
 
 
 def get_total_likes_and_posts(user) -> tuple[int]:
+
     user_id = user.id
     posts = Post.objects.filter(author_id=user_id)
-    likes = sum(post.likes.count() for post in posts)
+    likes = sum(post.likes.count() for post in posts)  # TODO n + 1
 
     return likes, len(posts)
