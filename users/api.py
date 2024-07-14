@@ -52,7 +52,10 @@ def register(request):
     serializer = UserSerializer(data=request.data)
 
     if serializer.is_valid():
-        if create_user(serializer, request.data['email'], request.data['password']):
+        email = serializer.validated_data['email']
+        password = serializer.validated_data['password']
+
+        if create_user(serializer, email, password):
             return Response('Registration successful! Login to continue',
                             status=status.HTTP_201_CREATED)
 

@@ -8,16 +8,15 @@ def create_user(serializer, email, password) -> bool:
 
     try:
         with transaction.atomic():
-            serializer.save()
-        user = User.objects.get(email=email)
+            user = serializer.save()
+            user.set_password(password)
+            user.username = email.split('@')[0] + str(user.id)
+            user.is_sandboxed = True
+            user.save()
+        return True
+    
     except IntegrityError:
         return False
-    else:
-        user.set_password(password)
-        user.username = email.split('@')[0] + str(user.id)
-        user.is_sandboxed = True
-        user.save()
-        return True
 
 
 def upload_profile_picture(profile_picture, user) -> None:
