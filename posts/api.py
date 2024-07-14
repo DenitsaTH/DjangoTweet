@@ -15,7 +15,6 @@ from exceptions import PostNotFoundException, UnauthorizedAccessException
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_posts(request):
-
     """
     get:
     Retrieve paginated list of posts
@@ -37,7 +36,7 @@ def get_posts(request):
     - 400 Bad Request: If the provided input for pages or items_per_page is invalid.
 
     **Example response on success:**
-    
+
     {
     "posts": [
         {
@@ -60,7 +59,7 @@ def get_posts(request):
         "error": "Invalid input for pages or items per page"
     }
     """
-    
+
     pages = request.GET.get('pages', 1)
     items_per_page = request.GET.get('items_per_page', 20)
 
@@ -68,16 +67,18 @@ def get_posts(request):
         pages, items_per_page = int(pages), int(items_per_page)
 
     except ValueError:
-        return Response({"error": "Invalid input for pages or items per page"}, 
+        return Response({"error": "Invalid input for pages or items per page"},
                         status=status.HTTP_400_BAD_REQUEST)
-    
+
     posts, has_next = get_all_posts(pages, items_per_page)
-    posts_serialized = PostSerializer(posts, many=True).data  # serialize from Django db Model instance to native Python data types
+
+    # serialize from Django db Model instance to native Python data types
+    posts_serialized = PostSerializer(posts, many=True).data
 
     data = {
-            'posts': posts_serialized,
-            'has_next': has_next,
-        }
+        'posts': posts_serialized,
+        'has_next': has_next,
+    }
 
     return Response(data)  # Response() handles JSON rendering
 
@@ -86,7 +87,6 @@ def get_posts(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def submit_post(request):
-
     """
     post:
     Submit a new post with the provided data
@@ -140,7 +140,6 @@ def submit_post(request):
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def switch_like(request, post_id):
-    
     """
     put:
     Toggle user's like status on a specific post
@@ -170,18 +169,18 @@ def switch_like(request, post_id):
 
     try:
         res = switch_like_status(post_id, request.user)
-        return Response(res, 
-                    status=status.HTTP_201_CREATED)
-    
+        return Response(res,
+                        status=status.HTTP_201_CREATED)
+
     except PostNotFoundException as e:
-        return Response({'error': e.message}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': e.message},
+                        status=status.HTTP_404_NOT_FOUND)
 
 
 @swagger_auto_schema(method='delete', tags=['posts'])
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_post(request, post_id):
-
     """
     delete:
     Delete the specified post. Only the author of the post can delete it
@@ -223,9 +222,11 @@ def delete_post(request, post_id):
     try:
         remove_post(post_id, request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
-    
+
     except PostNotFoundException as e:
-        return Response({'error': e.message}, status=status.HTTP_404_NOT_FOUND)
-    
+        return Response({'error': e.message},
+                        status=status.HTTP_404_NOT_FOUND)
+
     except UnauthorizedAccessException as e:
-        return Response({'error': e.message}, status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': e.message},
+                        status=status.HTTP_403_FORBIDDEN)

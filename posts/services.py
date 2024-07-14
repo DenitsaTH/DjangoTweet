@@ -11,7 +11,7 @@ def get_post(id) -> Post | None:
         post = Post.objects.get(id=id)
         return post
     except Post.DoesNotExist:
-        return None
+        return
 
 
 def is_user_owner(post, user) -> bool:
@@ -43,7 +43,7 @@ def remove_post(post_id, user) -> None:
         raise UnauthorizedAccessException()
 
     # call background task
-    delete_posts()  
+    delete_posts()
 
     # use overriden delete() method of Post model
     post.delete()

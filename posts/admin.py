@@ -2,8 +2,10 @@ from django.contrib import admin
 
 from posts.models import Post
 
+
 class CustomPostsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'content', 'created_at', 'is_deleted', 'deleted_at', 'author']
+    list_display = ['id', 'content', 'created_at',
+                    'is_deleted', 'deleted_at', 'author']
     list_filter = ['is_deleted']
     search_fields = ['id', 'author', 'content']
     actions = ['restore_posts']

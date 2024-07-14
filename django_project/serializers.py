@@ -20,6 +20,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
 
 '''Serializer instead of ModelSerializer - no need for the Meta class, only one attribute is needed (prof. picture),
 not an entire representation of the Django db Model'''
+
+
 class ProfilePictureSerializer(serializers.Serializer):
     profile_picture = serializers.ImageField()
 
@@ -27,7 +29,7 @@ class ProfilePictureSerializer(serializers.Serializer):
 class PostSerializer(serializers.ModelSerializer):
     author = UserSerializer(read_only=True)
     liked_users = UserSerializer(many=True, read_only=True)
-    
+
     class Meta:
         model = Post
         fields = ['id', 'author', 'content', 'created_at', 'liked_users']
