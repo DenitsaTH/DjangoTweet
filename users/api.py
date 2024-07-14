@@ -258,7 +258,7 @@ def update_profile_picture(request):
     if serializer.is_valid():
         try:
             upload_profile_picture(
-                serializer.validated_data['profile_picture'], user)
+                request.data.get('profile_picture'), user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except ValidationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
