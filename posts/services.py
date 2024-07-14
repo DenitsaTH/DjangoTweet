@@ -51,6 +51,7 @@ def remove_post(post_id, user) -> None:
 
 def get_all_posts(pages, items_per_page) -> tuple[list[Post], bool]:
 
+    # QuerySets are lazy - no db interaction is made until they are evaluated
     all_posts = Post.objects.filter(is_deleted=False).order_by('-id')
     paginator = Paginator(all_posts, items_per_page)
 

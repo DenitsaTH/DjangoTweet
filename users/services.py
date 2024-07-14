@@ -1,6 +1,7 @@
 import os
 from django.forms import ValidationError
 from django.db import IntegrityError, transaction
+from django.db.models import Sum
 from django.core.exceptions import SuspiciousFileOperation
 
 from posts.models import Post
@@ -46,7 +47,8 @@ def upload_profile_picture(profile_picture, user) -> None:
 def get_total_likes_and_posts(user) -> tuple[int]:
 
     user_id = user.id
-    posts = Post.objects.filter(author_id=user_id)
-    likes = sum(post.likes.count() for post in posts)  # TODO n + 1
+    all_user_posts = Post.objects.filter(author_id=user_id)
+    all_user_posts_likes = all_user_posts.aggregate(
+        total_likes=Sum('likes'))
 
-    return likes, len(posts)
+    return all_user_posts_likes, all_user_posts.count()
