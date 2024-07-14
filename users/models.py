@@ -11,4 +11,6 @@ class User(AbstractUser):
     is_deleted = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
+
+    # when creating a user via the createsuperuser management command
     REQUIRED_FIELDS = ['username']

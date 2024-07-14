@@ -23,7 +23,6 @@ def home_page(request):
 @swagger_auto_schema(method='post', tags=['public'], request_body=UserSerializer)
 @api_view(['POST'])
 def register(request):
-
     """
     post:
     Register a new user with an email and password
@@ -54,15 +53,15 @@ def register(request):
 
     if serializer.is_valid():
         if create_user(serializer, request.data['email'], request.data['password']):
-            return Response('Registration successful! Login to continue', status=status.HTTP_201_CREATED)
-            
+            return Response('Registration successful! Login to continue',
+                            status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='post', tags=['public'], request_body=UserSerializer)
 @api_view(['POST'])
 def login(request):
-
     """
     post:
     Authenticate a user with provided email and password
@@ -106,12 +105,12 @@ def login(request):
         "detail": "Not found."
     }
     """
-        
+
     user = get_object_or_404(User, email=request.data['email'])
 
     if not user.check_password(request.data['password']):
         return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
-    
+
     if user.is_deleted or user.is_sandboxed:
         return Response({'detail': 'Profile inactive'}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -124,7 +123,6 @@ def login(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    
     """
     post:
     Logout the authenticated user and delete the current session token
@@ -146,15 +144,18 @@ def logout(request):
     }
     """
 
-    request.user.auth_token.delete()
-    return Response(status=status.HTTP_200_OK)
+    try:
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
+    except Exception:
+        return Response({'detail': 'Failed to log out.'},
+                        status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='put', tags=['users'], request_body=UserProfileSerializer)
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 def update_profile(request):
-    
     """
     put:
     Update profile information of the currently authenticated user
@@ -186,7 +187,8 @@ def update_profile(request):
 
     user_profile = request.user
 
-    serializer = UserProfileSerializer(instance=user_profile, data=request.data, partial=True)
+    serializer = UserProfileSerializer(
+        instance=user_profile, data=request.data, partial=True)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -198,9 +200,9 @@ def update_profile(request):
     tags=['users'],
     manual_parameters=[
         openapi.Parameter(
-            'profile_picture', 
-            openapi.IN_FORM, 
-            type=openapi.TYPE_FILE, 
+            'profile_picture',
+            openapi.IN_FORM,
+            type=openapi.TYPE_FILE,
             required=True
         ),
     ]
@@ -209,7 +211,6 @@ def update_profile(request):
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
 def update_profile_picture(request):
-
     """
     put:
     Update the profile picture of the currently authenticated user
@@ -260,7 +261,6 @@ def update_profile_picture(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_user_likes_and_posts(request):
-
     """
     get:
     Retrieve total likes and posts created by the currently authenticated user
@@ -284,7 +284,7 @@ def get_user_likes_and_posts(request):
         "Total posts created": 45
     }
     """
-        
+
     likes, posts = get_total_likes_and_posts(request.user)
 
     return Response({"Total likes": likes,
