@@ -1,4 +1,4 @@
-from datetime import timezone
+from django.utils import timezone
 from django.db import models
 
 from users.models import User
@@ -12,9 +12,10 @@ class Post(models.Model):
     deleted_at = models.DateTimeField(null=True, blank=True)
 
 
-    def delete(self):
-        self.posts.all().update(is_deleted=True, deleted_at=timezone.now())
-        super().delete()
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
 
 
     @property
