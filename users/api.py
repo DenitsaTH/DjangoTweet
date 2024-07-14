@@ -1,3 +1,4 @@
+from django.forms import ValidationError
 from django.http import HttpResponse
 from rest_framework.decorators import api_view, permission_classes, parser_classes
 from rest_framework.response import Response
@@ -192,9 +193,11 @@ def update_profile(request):
 
     serializer = UserProfileSerializer(
         instance=user_profile, data=request.data, partial=True)
+
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
@@ -250,14 +253,17 @@ def update_profile_picture(request):
     """
 
     user = request.user
-
     serializer = UserSerializer(user, data=request.data, partial=True)
 
     if serializer.is_valid():
-        upload_profile_picture(request.data.get('profile_picture'), user)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+        try:
+            upload_profile_picture(
+                serializer.validated_data['profile_picture'], user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except ValidationError as e:
+            return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
-    return Response(serializer.errors, status=status.HTTP_400_OK)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='get', tags=['users'])

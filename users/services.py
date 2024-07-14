@@ -1,8 +1,12 @@
 import os
-from posts.models import Post
-from users.models import User
+from django.forms import ValidationError
 from django.db import IntegrityError, transaction
+from django.core.exceptions import SuspiciousFileOperation
 
+from posts.models import Post
+
+
+ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png']
 
 def create_user(serializer, email, password) -> bool:
 
@@ -14,7 +18,7 @@ def create_user(serializer, email, password) -> bool:
             user.is_sandboxed = True
             user.save()
         return True
-    
+
     except IntegrityError:
         return False
 
@@ -22,13 +26,20 @@ def create_user(serializer, email, password) -> bool:
 def upload_profile_picture(profile_picture, user) -> None:
     
     if profile_picture:
-        file_path = os.path.join('uploads', profile_picture.name)
-        with open(os.path.join('media', file_path), 'wb+') as destination:
-            for chunk in profile_picture.chunks():
-                destination.write(chunk)
+        if profile_picture.content_type not in ALLOWED_IMAGE_TYPES:
+            raise ValidationError("Only JPEG and PNG images are allowed.")
 
-        user.profile_picture = file_path
-        user.save()
+        try:
+            file_path = os.path.join('uploads', profile_picture.name)
+            with open(os.path.join('media', file_path), 'wb+') as destination:
+                for chunk in profile_picture.chunks():
+                    destination.write(chunk)
+
+            user.profile_picture = file_path
+            user.save()
+
+        except (IOError, SuspiciousFileOperation) as e:
+            raise ValidationError(f"Failed to upload file: {e}")
 
 
 def get_total_likes_and_posts(user) -> tuple[int]:
