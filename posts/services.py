@@ -2,7 +2,6 @@ from django.core.paginator import Paginator
 
 from posts.models import Post
 from exceptions import PostNotFoundException, UnauthorizedAccessException
-from posts.tasks import delete_posts
 
 
 def get_post(id) -> Post | None:
@@ -43,7 +42,7 @@ def remove_post(post_id, user) -> None:
         raise UnauthorizedAccessException()
 
     # call background task
-    delete_posts()
+    # delete_posts()
 
     post.is_deleted = True
     post.save()

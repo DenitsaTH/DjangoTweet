@@ -1,17 +1,14 @@
+from celery import shared_task
 from django.utils import timezone
-from background_task import background
-
+from datetime import timedelta
 from posts.models import Post
 
 
-# scheduled to run after 5 seconds -> for testing purposes
-@background(schedule=5)
-def delete_posts():
-
-    # switch days=10 with seconds=5 to test this
-    ten_days_ago = timezone.now() - timezone.timedelta(days=10)
-
-    soft_deleted_posts = Post.objects.filter(is_deleted=True,
-                                             deleted_at__lte=ten_days_ago)
-
-    soft_deleted_posts.delete()
+@shared_task
+def delete_old_posts():
+    print(f"Running task at {timezone.now()}")
+    threshold = timezone.now() - timedelta(minutes=5)
+    deleted_posts = Post.objects.filter(is_deleted=True, deleted_at__lt=threshold)
+    print(f"Found {deleted_posts.count()} posts to delete")
+    deleted_posts.delete()
+    print("Old posts deleted")
