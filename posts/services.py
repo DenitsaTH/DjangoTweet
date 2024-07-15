@@ -45,8 +45,8 @@ def remove_post(post_id, user) -> None:
     # call background task
     delete_posts()
 
-    # use overriden delete() method of Post model
-    post.delete()
+    post.is_deleted = True
+    post.save()
 
 
 def get_all_posts(pages, items_per_page) -> tuple[list[Post], bool]:
