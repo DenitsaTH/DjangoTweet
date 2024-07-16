@@ -1,4 +1,5 @@
 from django.core.paginator import Paginator
+from django.utils import timezone
 
 from posts.models import Post
 from exceptions import PostNotFoundException, UnauthorizedAccessException
@@ -45,6 +46,7 @@ def remove_post(post_id, user) -> None:
     # delete_posts()
 
     post.is_deleted = True
+    post.deleted_at = timezone.now()
     post.save()
 
 
