@@ -12,7 +12,7 @@ class Post(models.Model):
     likes = models.ManyToManyField(
         User, related_name='liked_posts', blank=True)
     is_deleted = models.BooleanField(default=False)
-    deleted_at = models.DateTimeField(auto_now_add=True)
+    deleted_at = models.DateTimeField(null=True, blank=True)
 
     @property
     def liked_users(self):

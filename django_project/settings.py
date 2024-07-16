@@ -88,9 +88,9 @@ CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
 # CELERY_RESULT_BACKEND = 'django-db'
 
 
-# # Django-celery-results configuration
+# Django-celery-results configuration
 # CELERY_RESULT_BACKEND = 'django-db+mysql://root:proprie@localhost:3306/django'
-CELERY_RESULT_BACKEND = 'django-db:sqlite:///{}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
 
 
 # Media files (uploads)
