@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_celery_results',
 
     # Third-party Apps
     'corsheaders',
@@ -80,6 +81,16 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+# Celery settings
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672/'
+# CELERY_RESULT_BACKEND = 'django-db'
+
+
+# Django-celery-results configuration
+# CELERY_RESULT_BACKEND = 'django-db+mysql://root:proprie@localhost:3306/django'
+CELERY_RESULT_BACKEND = 'db+sqlite:///db.sqlite3'
 
 
 # Media files (uploads)
@@ -155,6 +166,18 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'django',
+#         'USER': 'root',
+#         'PASSWORD': 'proprie',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 
 
 # Password validation

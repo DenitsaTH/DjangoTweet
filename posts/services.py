@@ -1,8 +1,8 @@
 from django.core.paginator import Paginator
+from django.utils import timezone
 
 from posts.models import Post
 from exceptions import PostNotFoundException, UnauthorizedAccessException
-from posts.tasks import delete_posts
 
 
 def get_post(id) -> Post | None:
@@ -42,10 +42,8 @@ def remove_post(post_id, user) -> None:
     if not is_user_owner(post, user):
         raise UnauthorizedAccessException()
 
-    # call background task
-    delete_posts()
-
     post.is_deleted = True
+    post.deleted_at = timezone.now()
     post.save()
 
 
