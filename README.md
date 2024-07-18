@@ -166,15 +166,11 @@ From the admin page, you can:
 - [Link](http://127.0.0.1:8000/api/v1/swagger/schema/)
 
 
-### 4. Register an user using the dedicated public endpoint or login with an already created user account:
-
-- Email: user1@somedomain.com
-- Pass: pass
-
+### 4. Register an user using the dedicated public endpoint.
 
 ### 5. For Swagger to remember your authentication Token:
 
 - Click on *Authorize* button
-- Example for *Value* field: Token 18ef4d413eb691df11c6f60719e3617fce1adb4a (since user1 is logged in)
+- Example for *Value* field: Token 18ef4d413eb691df11c6f60719e3617fce1adb4a
 
 ### 6. Refer to the API documentation for each endpoint for more information.
