@@ -42,9 +42,6 @@ def remove_post(post_id, user) -> None:
     if not is_user_owner(post, user):
         raise UnauthorizedAccessException()
 
-    # call background task
-    # delete_posts()
-
     post.is_deleted = True
     post.deleted_at = timezone.now()
     post.save()
