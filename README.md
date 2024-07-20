@@ -39,7 +39,7 @@ Twitter clone, implemented with Django and Django REST Framework.
 pip install -r requirements.txt
 ```
 
-## 2. Run Migrations to create the database
+### 2. Run Migrations to create the database
 
 ```
 python manage.py makemigrations
