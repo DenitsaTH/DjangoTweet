@@ -17,12 +17,9 @@ from env import env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+BASE_BACKEND_URL = env.str("DJANGO_BASE_BACKEND_URL", default="http://localhost:8000")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# Secret Key for development process
-SECRET_KEY = 'django-insecure-tyye81+#e2^u6-$g$upq4$s1jz5^0=j4xr2n%-w8!)w^w#@^(@'
+SECRET_KEY = env.str('SECRET_KEY', default="")
 
 # Switch to False for production
 DEBUG = True
