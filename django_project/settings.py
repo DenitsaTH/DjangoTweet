@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -232,3 +233,12 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'JSON_EDITOR': True,
 }
+
+
+# Google Authentication
+
+GOOGLE_OAUTH2_CLIENT_ID = env.str("DJANGO_GOOGLE_OAUTH2_CLIENT_ID", default="")
+GOOGLE_OAUTH2_CLIENT_SECRET = env.str(
+    "DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET", default="")
+GOOGLE_OAUTH2_PROJECT_ID = env.str(
+    "DJANGO_GOOGLE_OAUTH2_PROJECT_ID", default="")
