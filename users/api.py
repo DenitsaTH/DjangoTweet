@@ -63,64 +63,64 @@ def register(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@swagger_auto_schema(method='post', tags=['public'], request_body=UserSerializer)
-@api_view(['POST'])
-def login(request):
-    """
-    post:
-    Authenticate a user with provided email and password
+# @swagger_auto_schema(method='post', tags=['public'], request_body=UserSerializer)
+# @api_view(['POST'])
+# def login(request):
+#     """
+#     post:
+#     Authenticate a user with provided email and password
 
-    This endpoint verifies the provided email and password combination against
-    the stored user credentials. If authentication succeeds, it generates a new
-    access token for the user session. The token can be used for subsequent
-    authenticated requests through the **Authorize** button. Input 'Token *token_value*'
-    in the Value field.
+#     This endpoint verifies the provided email and password combination against
+#     the stored user credentials. If authentication succeeds, it generates a new
+#     access token for the user session. The token can be used for subsequent
+#     authenticated requests through the **Authorize** button. Input 'Token *token_value*'
+#     in the Value field.
 
-    **Parameters:**
-    - request (`HttpRequest`): The HTTP request containing user login credentials.
+#     **Parameters:**
+#     - request (`HttpRequest`): The HTTP request containing user login credentials.
 
-    **Request Body:**
-    - email (`str`): The email address of the user.
-    - password (`str`): The password for the user account.
+#     **Request Body:**
+#     - email (`str`): The email address of the user.
+#     - password (`str`): The password for the user account.
 
-    **Responses:**
-    - 200 OK: Authentication successful. Returns a token and user details.
-    - 401 Unauthorized: User profile is inactive or does not exist.
-    - 404 Not Found: Invalid email or password provided.
+#     **Responses:**
+#     - 200 OK: Authentication successful. Returns a token and user details.
+#     - 401 Unauthorized: User profile is inactive or does not exist.
+#     - 404 Not Found: Invalid email or password provided.
 
-    **Example response on success:**
+#     **Example response on success:**
 
-    {
-    "token": generated token,
-    "user": {
-        "id": 1,
-        "email": "user@example.com"
-    }
+#     {
+#     "token": generated token,
+#     "user": {
+#         "id": 1,
+#         "email": "user@example.com"
+#     }
 
-    **Example response when profile is inactive:**
+#     **Example response when profile is inactive:**
 
-    {
-        "detail": "Profile inactive"
-    }
+#     {
+#         "detail": "Profile inactive"
+#     }
 
-    **Example response on invalid credentials:**
+#     **Example response on invalid credentials:**
 
-    {
-        "detail": "Not found."
-    }
-    """
+#     {
+#         "detail": "Not found."
+#     }
+#     """
 
-    user = get_object_or_404(User, email=request.data['email'])
+#     user = get_object_or_404(User, email=request.data['email'])
 
-    if not user.check_password(request.data['password']):
-        return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
+#     if not user.check_password(request.data['password']):
+#         return Response({'detail': 'Not found.'}, status=status.HTTP_404_NOT_FOUND)
 
-    if user.is_deleted or user.is_sandboxed:
-        return Response({'detail': 'Profile inactive'}, status=status.HTTP_401_UNAUTHORIZED)
+#     if user.is_deleted or user.is_sandboxed:
+#         return Response({'detail': 'Profile inactive'}, status=status.HTTP_401_UNAUTHORIZED)
 
-    token, _ = Token.objects.get_or_create(user=user)
-    serializer = UserSerializer(instance=user)
-    return Response({'token': token.key, 'user': serializer.data})
+#     token, _ = Token.objects.get_or_create(user=user)
+#     serializer = UserSerializer(instance=user)
+#     return Response({'token': token.key, 'user': serializer.data})
 
 
 @swagger_auto_schema(method='post', tags=['public'])
