@@ -1,11 +1,15 @@
-from random import SystemRandom
-from urllib.parse import urlencode
+from attrs import define
 from django.core.exceptions import ImproperlyConfigured
 from django.urls import reverse_lazy
-from attrs import define
+import jwt
 from oauthlib.common import UNICODE_ASCII_CHARACTER_SET
+from random import SystemRandom
+import requests
+from typing import Dict
+from urllib.parse import urlencode
 
 from django_project import settings
+from exceptions import ApplicationError
 
 
 @define
@@ -13,6 +17,18 @@ class GoogleLoginCredentials:
     client_id: str
     client_secret: str
     project_id: str
+
+
+@define
+class GoogleAccessTokens:
+    id_token: str
+    access_token: str
+
+    def decode_id_token(self) -> Dict[str, str]:
+        id_token = self.id_token
+        decoded_token = jwt.decode(jwt=id_token, options={
+                                   'verify_signature': False})
+        return decoded_token
 
 
 def google_login_get_credentials() -> GoogleLoginCredentials:
@@ -42,7 +58,7 @@ def google_login_get_credentials() -> GoogleLoginCredentials:
 class GoogleLoginFlowService:
 
     # create a URL for the OAuth2 callback endpoint
-    API_URI = reverse_lazy('api:google-oauth2:login:callback')
+    API_URI = reverse_lazy('authentication:callback')
 
     # URL used to initiate the OAuth2 authorization process with Google
     GOOGLE_AUTH_URL = "https://accounts.google.com/o/oauth2/auth"
@@ -96,3 +112,34 @@ class GoogleLoginFlowService:
         authorization_url = f"{self.GOOGLE_AUTH_URL}?{query_params}"
 
         return authorization_url, state
+
+    # the redirect_uri is necessary for the token exchange request to ensure that it matches the one initially used
+
+    def get_tokens(self, *, code: str) -> GoogleAccessTokens:
+        redirect_uri = self._get_redirect_uri()
+
+    # construct the payload for the POST request to obtain the access token from Google
+        data = {
+            'code': code,
+            'client_id': self._credentials.client_id,
+            'client_secret': self._credentials.client_secret,
+            'redirect_uri': redirect_uri,
+            'grant_type': 'authorization_code'
+        }
+
+        response = requests.post(
+            self.GOOGLE_ACCESS_TOKEN_OBTAIN_URL, data=data)
+
+        if not response.ok:
+            print(response.text)
+            raise ApplicationError(
+                'Failed to obtain Access token from Google.')
+
+        tokens = response.json()
+
+        google_tokens = GoogleAccessTokens(
+            id_token=tokens['id_token'],
+            access_token=tokens['access_token']
+        )
+
+        return google_tokens
