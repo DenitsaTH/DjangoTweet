@@ -12,16 +12,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 
 import os
 from pathlib import Path
+from django_project.env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+BASE_BACKEND_URL = env.str("DJANGO_BASE_BACKEND_URL",
+                           default="http://localhost:8000")
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# Secret Key for development process
-SECRET_KEY = 'django-insecure-tyye81+#e2^u6-$g$upq4$s1jz5^0=j4xr2n%-w8!)w^w#@^(@'
+SECRET_KEY = env.str('SECRET_KEY', default="")
 
 # Switch to False for production
 DEBUG = True
@@ -59,6 +58,7 @@ INSTALLED_APPS = [
     # Custom Apps
     'users',
     'posts',
+    'authentication'
 ]
 
 # Django REST Framework configuration
@@ -232,3 +232,23 @@ SWAGGER_SETTINGS = {
     'USE_SESSION_AUTH': False,
     'JSON_EDITOR': True,
 }
+
+
+# Google Authentication
+
+GOOGLE_OAUTH2_CLIENT_ID = env.str("DJANGO_GOOGLE_OAUTH2_CLIENT_ID", default="")
+GOOGLE_OAUTH2_CLIENT_SECRET = env.str(
+    "DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET", default="")
+GOOGLE_OAUTH2_PROJECT_ID = env.str(
+    "DJANGO_GOOGLE_OAUTH2_PROJECT_ID", default="")
+
+
+# Session settins
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+SESSION_COOKIE_NAME = "sessionid"
+SESSION_COOKIE_AGE = 1209600  # 2 weeks, in seconds
+SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
+SESSION_COOKIE_SECURE = False  # Set to True in production to use HTTPS
+SESSION_COOKIE_SAMESITE = 'Lax'  # Helps prevent CSRF attacks
+
+CSRF_USE_SESSIONS = True
