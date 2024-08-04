@@ -1,11 +1,12 @@
 from django.contrib import admin
-from django.urls import path
+from django.urls import include, path
 from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from users import api as users_api
+from authentication import api as oauth2_api
 from posts import api as posts_api
+from users import api as users_api
 
 
 schema_view = get_schema_view(
@@ -21,7 +22,7 @@ schema_view = get_schema_view(
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', users_api.login),
+    path('google-oauth2/login/', include('authentication.urls', namespace='authentication')),
     path('register/', users_api.register),
     path('logout/', users_api.logout),
     path('home/', posts_api.get_posts, name='get_all_posts'),
