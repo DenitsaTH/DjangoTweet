@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.response import Response
 from django_project.serializers import UserProfileSerializer, UserSerializer
 from rest_framework import status
-from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
@@ -149,11 +148,17 @@ def logout(request):
     """
 
     try:
-        request.user.auth_token.delete()
-        return Response(status=status.HTTP_200_OK)
-    except Exception:
-        return Response({'detail': 'Failed to log out.'},
-                        status=status.HTTP_400_BAD_REQUEST)
+        # delete user token
+        if hasattr(request.user, 'auth_token'):
+            request.user.auth_token.delete()
+
+        # clear session data
+        if hasattr(request, 'session'):
+            request.session.flush()
+        return Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+
+    except Exception as e:
+        return Response({'detail': f'Failed to log out: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 @swagger_auto_schema(method='put', tags=['users'], request_body=UserProfileSerializer)
