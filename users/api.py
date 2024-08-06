@@ -4,13 +4,11 @@ from rest_framework.decorators import api_view, permission_classes, parser_class
 from rest_framework.response import Response
 from django_project.serializers import UserProfileSerializer, UserSerializer
 from rest_framework import status
-from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from users.models import User
 from users.services import create_user, get_total_likes_and_posts, upload_profile_picture
 
 

@@ -4,7 +4,6 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from authentication import api as oauth2_api
 from posts import api as posts_api
 from users import api as users_api
 
