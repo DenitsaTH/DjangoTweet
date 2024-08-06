@@ -101,9 +101,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # CORS settings
 
-CORS_ALLOWED_ORIGINS = [
-    "https://app.somedomain.com",
-]
+CORS_ORIGIN_ALLOW_ALL = True
+ALLOWED_HOSTS = ['*']
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -250,9 +249,10 @@ SESSION_COOKIE_NAME = 'sessionid'
 SESSION_COOKIE_AGE = 86400  # 1 day
 SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
 SESSION_COOKIE_SECURE = False  # Set to True in production to use HTTPS
-SESSION_COOKIE_SAMESITE = 'Lax'  # Helps prevent CSRF attacks
+SESSION_COOKIE_SAMESITE = 'None'
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+SESSION_SAVE_EVERY_REQUEST = True
 
 # CSRF Settings
-CSRF_COOKIE_SAMESITE = 'Lax'  # Helps prevent CSRF attacks
+CSRF_COOKIE_SAMESITE = 'None'
 CSRF_USE_SESSIONS = False
