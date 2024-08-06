@@ -170,3 +170,5 @@ celerybeat-schedule.dir
 .idea
 .vscode
 db.sqlite3
+
+successful_login.png
