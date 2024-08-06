@@ -19,7 +19,7 @@ Twitter clone, implemented with Django and Django REST Framework.
 
 **API:** Django Rest Framework
 
-**Authentication**: Token-based authentication with `rest_framework.authtoken`
+**Authentication**: Google Authentication
 
 **Database:** SQLite
 
@@ -61,8 +61,6 @@ python manage.py runserver
 - **Public endpoints** - accessible without authentication
     * Register user
     * Login
-    * Logout
-
 
 - **Authentication Endpoints** - require login with email and password
 
@@ -70,6 +68,7 @@ python manage.py runserver
         * Edit profile information (names and description only)
         * Upload or change profile picture
         * Retrieve user's posts and accumulated likes of all user's posts
+        * Logout
   
     - **Features, related to posts:**
         * Submit a post
@@ -78,6 +77,18 @@ python manage.py runserver
         * Delete a post (owner required)
 
 ---
+
+## Google Authentication
+
+To test the authentication flow, run the server and directly access `http://127.0.0.1:8000/google-oauth2/login/redirect/` in your browser. This is the link to the endpoint which will redirect the user to the Google Login screen. It cannot be accessed directly throught Swagger due to CORS.
+
+On the Google login page, you may be asked to enter your Google credentials (email and password). Once logged in, you might see a consent screen asking you to allow DjangoTweet to access your profile information. Click `Continue` to proceed.
+
+After successful authorization, Google will redirect you back to DjangoTweet. This redirect includes an authorization code and a state parameter that helps ensure the security of the process. In the browser, you will see this:
+
+Copy the token and proceed to [Try it out](#try-it-out) section for further instructions.
+
+--
 
 ## Background Tasks
 
@@ -120,6 +131,7 @@ The tasks are currently set to run every 30 seconds. You can change this in `cel
 ## Project Structure
 
 ```
+authentication/                             - google authentication logic
 django_project/                             - core project folder
 ├─ celery.py                                - celery settings
 ├─ serializers.py                           - model serializers
