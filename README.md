@@ -85,11 +85,11 @@ To test the authentication flow, run the server and directly access `http://127.
 
 On the Google login page, you may be asked to enter your Google credentials (email and password). Once logged in, you might see a consent screen asking you to allow DjangoTweet to access your profile information. Click `Continue` to proceed.
 
-After successful authorization, Google will redirect you back to DjangoTweet. This redirect includes an authorization code and a state parameter that helps ensure the security of the process. In the browser, you will see this:
+After successful authorization, Google will redirect you back to DjangoTweet. This redirect includes an authorization code and a state parameter that helps ensure the security of the process.
 
-Copy the token and proceed to [Try it out](#try-it-out) section for further instructions.
+Copy the token from the JSON body of the response and proceed to [Try it out](#try-it-out) section for further instructions.
 
---
+---
 
 ## Background Tasks
 
