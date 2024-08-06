@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, schema
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -17,6 +17,27 @@ logger = logging.getLogger(__name__)
 @swagger_auto_schema(method='get', tags=['public'], operation_summary="Redirects to Google OAuth2 login")
 @api_view(['GET'])
 def google_login_redirect_api(request, *args, **kwargs):
+
+    '''
+    get:
+    Redirects to Google OAuth2 login
+
+    This endpoint starts the Google OAuth2 authentication flow by generating an
+    authorization URL and redirecting the user to Google's login page. This redirection
+    allows users to authenticate using their Google account. A state parameter is included
+    to prevent CSRF (Cross-Site Request Forgery) attacks.
+
+    **Parameters:**
+    - request (`HttpRequest`): The HTTP request object.
+
+    **Responses:**
+    - 302 Found: Redirects the user to the Google OAuth2 authorization URL.
+
+    **Example response on success:**
+
+    The server responds with a redirect status code (302) and the `Location` header set
+    to the Google OAuth2 authorization URL. The response body is empty as it is a redirect.
+    '''
 
     google_login_flow = GoogleLoginFlowService()
 
@@ -37,7 +58,31 @@ class GoogleLoginInputSerializer(serializers.Serializer):
 
 
 @api_view(['GET'])
+@schema(None)
 def google_login_api(request, *args, **kwargs):
+
+    '''
+    get:
+    Google login callback
+
+    This endpoint handles the callback from Google after the user has authenticated. It
+    verifies the state parameter to prevent CSRF attacks, exchanges the authorization
+    code for tokens, retrieves the user, and logs them in. It then returns a DRF token for
+    authenticated interactions.
+
+    **Parameters:**
+    - request (`HttpRequest`): The HTTP request containing query parameters from Google.
+
+    **Query Parameters:**
+    - code (`str`): The authorization code received from Google.
+    - error (`str`, optional): Error message from Google, if any.
+    - state (`str`): The state parameter used to prevent CSRF attacks.
+
+    **Responses:**
+    - 200 OK: Successful login. Returns a token for authenticated interactions and decoded ID token.
+    - 400 Bad Request: Invalid request parameters or CSRF check failure.
+    '''
+
     input_serializer = GoogleLoginInputSerializer(data=request.GET)
     input_serializer.is_valid(raise_exception=True)
 

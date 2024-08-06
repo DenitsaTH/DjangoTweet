@@ -62,7 +62,7 @@ def register(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-@swagger_auto_schema(method='post', tags=['public'])
+@swagger_auto_schema(method='post', tags=['users'])
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def logout(request):
