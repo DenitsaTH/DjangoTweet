@@ -6,6 +6,7 @@ Twitter clone, implemented with Django and Django REST Framework.
 
 * [Technologies](#technologies-used)
 * [Setup](#installation-and-setup)
+* [Authentication](#google-authentication)
 * [Features](#features)
 * [Background tasks](#background-tasks)
 * [Structure](#project-structure)
