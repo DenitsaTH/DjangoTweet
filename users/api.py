@@ -69,7 +69,7 @@ def logout(request):
     Logout the authenticated user and delete the current session token
 
     This endpoint logs out the currently authenticated user by deleting the
-    authentication token associated with the user session. After successful
+    authentication token and flushing the current user session. After successful
     logout, the user will need to re-authenticate to access protected resources.
 
     **Parameters:**

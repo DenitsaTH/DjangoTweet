@@ -25,7 +25,7 @@ def google_login_redirect_api(request, *args, **kwargs):
     This endpoint starts the Google OAuth2 authentication flow by generating an
     authorization URL and redirecting the user to Google's login page. This redirection
     allows users to authenticate using their Google account. A state parameter is included
-    to prevent CSRF (Cross-Site Request Forgery) attacks.
+    to prevent CSRF attacks.
 
     **Parameters:**
     - request (`HttpRequest`): The HTTP request object.
