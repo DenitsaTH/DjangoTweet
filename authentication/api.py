@@ -24,7 +24,7 @@ def google_login_redirect_api(request, *args, **kwargs):
 
     # state is added to prevent cross-site request forgery attacks (CSRF)
     request.session['google_oauth2_state'] = state
-    logger.debug(f"State set in session: {state}")
+    request.session.save()
 
     # redirect to the obtained Google authorization url
     return redirect(authorization_url)
@@ -53,18 +53,16 @@ def google_login_api(request, *args, **kwargs):
     if code is None or state is None:
         return Response({'error': 'Code and state required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # TODO fix state check for CSRF
     # Verify the state parameter against the value stored in the session to prevent CSRF attacks
-    # session_state = request.session.get('google_oauth2_state')
-    # logger.debug(f"State retrieved from session: {session_state}")
+    session_state = request.session['google_oauth2_state']
 
-    # if session_state is None:
-    #     return Response({'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST)
+    if session_state is None:
+        return Response({'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # del request.session['google_oauth2_state']
+    del request.session['google_oauth2_state']
 
-    # if state != session_state:
-    #     return Response({'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST)
+    if state != session_state:
+        return Response({'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Use GoogleLoginFlowService to exchange the authorization code for tokens and fetch user information
     google_login_flow = GoogleLoginFlowService()
