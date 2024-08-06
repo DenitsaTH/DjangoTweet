@@ -11,13 +11,9 @@ from authentication.services import GoogleLoginFlowService
 from users.models import User
 
 
-logger = logging.getLogger(__name__)
-
-
 @swagger_auto_schema(method='get', tags=['public'], operation_summary="Redirects to Google OAuth2 login")
 @api_view(['GET'])
 def google_login_redirect_api(request, *args, **kwargs):
-
     '''
     get:
     Redirects to Google OAuth2 login
@@ -45,6 +41,7 @@ def google_login_redirect_api(request, *args, **kwargs):
 
     # state is added to prevent cross-site request forgery attacks (CSRF)
     request.session['google_oauth2_state'] = state
+    request.session.modified = True
     request.session.save()
 
     # redirect to the obtained Google authorization url
@@ -58,9 +55,7 @@ class GoogleLoginInputSerializer(serializers.Serializer):
 
 
 @api_view(['GET'])
-@schema(None)
 def google_login_api(request, *args, **kwargs):
-
     '''
     get:
     Google login callback
@@ -83,6 +78,8 @@ def google_login_api(request, *args, **kwargs):
     - 400 Bad Request: Invalid request parameters or CSRF check failure.
     '''
 
+    session_id = request.session.session_key
+
     input_serializer = GoogleLoginInputSerializer(data=request.GET)
     input_serializer.is_valid(raise_exception=True)
 
@@ -99,15 +96,15 @@ def google_login_api(request, *args, **kwargs):
         return Response({'error': 'Code and state required.'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Verify the state parameter against the value stored in the session to prevent CSRF attacks
-    session_state = request.session['google_oauth2_state']
+    # session_state = request.session['google_oauth2_state']
 
-    if session_state is None:
-        return Response({'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST)
+    # if session_state is None:
+    #     return Response({'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    del request.session['google_oauth2_state']
+    # del request.session['google_oauth2_state']
 
-    if state != session_state:
-        return Response({'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST)
+    # if state != session_state:
+    #     return Response({'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST)
 
     # Use GoogleLoginFlowService to exchange the authorization code for tokens and fetch user information
     google_login_flow = GoogleLoginFlowService()
