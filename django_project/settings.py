@@ -243,12 +243,16 @@ GOOGLE_OAUTH2_PROJECT_ID = env.str(
     "DJANGO_GOOGLE_OAUTH2_PROJECT_ID", default="")
 
 
-# Session settins
-SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
-SESSION_COOKIE_NAME = "sessionid"
-SESSION_COOKIE_AGE = 1209600  # 2 weeks, in seconds
+# Session Management Settings
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_AGE = 86400  # 1 day
 SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
 SESSION_COOKIE_SECURE = False  # Set to True in production to use HTTPS
 SESSION_COOKIE_SAMESITE = 'Lax'  # Helps prevent CSRF attacks
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 
-CSRF_USE_SESSIONS = True
+# CSRF Settings
+CSRF_COOKIE_SAMESITE = 'Lax'  # Helps prevent CSRF attacks
+CSRF_USE_SESSIONS = False
