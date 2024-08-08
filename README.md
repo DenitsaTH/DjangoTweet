@@ -81,7 +81,7 @@ python manage.py runserver
 
 ## Google Authentication
 
-To test the authentication flow, run the server and directly access `http://127.0.0.1:8000/google-oauth2/login/redirect/` in your browser. This is the link to the endpoint which will redirect the user to the Google Login screen. It cannot be accessed directly throught Swagger due to CORS.
+To test the authentication flow, run the server and directly access `http://127.0.0.1:8000/google-oauth2/login/redirect/` in your browser. This is the link to the endpoint which will redirect the user to the Google Login screen. It cannot be accessed directly through Swagger due to CORS.
 
 On the Google login page, you may be asked to enter your Google credentials (email and password). Once logged in, you might see a consent screen asking you to allow DjangoTweet to access your profile information. Click `Continue` to proceed.
 
@@ -134,24 +134,24 @@ The tasks are currently set to run every 30 seconds. You can change this in `cel
 ```
 authentication/                             - google authentication logic
 django_project/                             - core project folder
-├─ celery.py                                - celery settings
-├─ serializers.py                           - model serializers
-├─ settings.py                              - project settings
-├─ urls.py                                  - url patterns
-media/                                    - media uploads
-posts/                                    - posts app
-├─ migrations/                              - db migrations
-├─ api.py                                   - api logic
-├─ admin.py                                 - admin features
-├─ core.py                                  - core app module
-├─ models.py                                - posts models
-├─ services.py                              - crud logic
-├─ tasks.py                                 - background tasks
-users/                                    - users app (structure similar to posts)
-README.md                                 - project decription
-exceptions.py                             - custom exceptions
-manage.py                                 - main module
-requirements.txt                          - project requirements
+├─ celery.py                                  - celery settings
+├─ serializers.py                             - model serializers
+├─ settings.py                                - project settings
+├─ urls.py                                    - url patterns
+media/                                      - media uploads
+posts/                                      - posts app
+├─ migrations/                                - db migrations
+├─ api.py                                     - api logic
+├─ admin.py                                   - admin features
+├─ core.py                                    - core app module
+├─ models.py                                  - posts models
+├─ services.py                                - crud logic
+├─ tasks.py                                   - background tasks
+users/                                      - users app (structure similar to posts)
+README.md                                   - project decription
+exceptions.py                               - custom exceptions
+manage.py                                   - main module
+requirements.txt                            - project requirements
 ```
 
 ---
