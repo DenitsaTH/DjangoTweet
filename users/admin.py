@@ -2,6 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import User
+from posts.models import Post
 
 
 class CustomUserAdmin(UserAdmin):
