@@ -238,10 +238,10 @@ GOOGLE_OAUTH2_PROJECT_ID = env.str('DJANGO_GOOGLE_OAUTH2_PROJECT_ID', default=''
 # Session Management Settings
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'mysessioncookie'
-SESSION_COOKIE_AGE = 86400  # 1 day
-# SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
-SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-# SESSION_SAVE_EVERY_REQUEST = True
-# SESSION_COOKIE_PATH = 'http://localhost:8000/google-oauth2/login/callback/'
-# SESSION_COOKIE_DOMAIN  = 'http://127.0.0.1:8000/api/v1/swagger/schema/'
+
+# Optional session cookie settings for local testing
+# SESSION_COOKIE_NAME = 'my_session_id'
+# SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+
+# Optional CSRF cookie settings (adjust for security)
+# CSRF_COOKIE_HTTPONLY = True
