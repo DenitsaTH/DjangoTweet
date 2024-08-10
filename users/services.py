@@ -11,7 +11,6 @@ ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png']
 
 
 def create_user(serializer, email, password) -> bool:
-
     try:
         with transaction.atomic():
             user = serializer.save()
@@ -26,10 +25,9 @@ def create_user(serializer, email, password) -> bool:
 
 
 def upload_profile_picture(profile_picture, user) -> None:
-
     if profile_picture:
         if profile_picture.content_type not in ALLOWED_IMAGE_TYPES:
-            raise ValidationError("Only JPEG and PNG images are allowed.")
+            raise ValidationError('Only JPEG and PNG images are allowed.')
 
         try:
             file_path = os.path.join('uploads', profile_picture.name)
@@ -41,14 +39,12 @@ def upload_profile_picture(profile_picture, user) -> None:
             user.save()
 
         except (IOError, SuspiciousFileOperation) as e:
-            raise ValidationError(f"Failed to upload file: {e}")
+            raise ValidationError(f'Failed to upload file: {e}')
 
 
 def get_total_likes_and_posts(user) -> tuple[int]:
-
     user_id = user.id
     all_user_posts = Post.objects.filter(author_id=user_id)
-    all_user_posts_likes = all_user_posts.aggregate(
-        total_likes=Sum('likes'))
+    all_user_posts_likes = all_user_posts.aggregate(total_likes=Sum('likes'))
 
     return all_user_posts_likes, all_user_posts.count()

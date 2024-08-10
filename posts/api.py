@@ -10,8 +10,16 @@ from posts.services import get_all_posts, remove_post, switch_like_status
 from exceptions import PostNotFoundException, UnauthorizedAccessException
 
 
-@swagger_auto_schema(method='get', tags=['posts'], manual_parameters=[openapi.Parameter('pages', openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
-                                                                      openapi.Parameter('items_per_page', openapi.IN_QUERY, type=openapi.TYPE_INTEGER),])
+@swagger_auto_schema(
+    method='get',
+    tags=['posts'],
+    manual_parameters=[
+        openapi.Parameter('pages', openapi.IN_QUERY, type=openapi.TYPE_INTEGER),
+        openapi.Parameter(
+            'items_per_page', openapi.IN_QUERY, type=openapi.TYPE_INTEGER
+        ),
+    ],
+)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_posts(request):
@@ -38,25 +46,25 @@ def get_posts(request):
     **Example response on success:**
 
     {
-    "posts": [
+    'posts': [
         {
-        "id": 1,
-        "author": {
-            "id": 1,
-            "email": "some_user@mail.com"
+        'id': 1,
+        'author': {
+            'id': 1,
+            'email': 'some_user@mail.com'
         },
-        "content": "Some content.",
-        "created_at": "2024-06-30T14:06:59.700338Z",
-        "liked_users": []
+        'content': 'Some content.',
+        'created_at': '2024-06-30T14:06:59.700338Z',
+        'liked_users': []
         }
     ],
-    "has_next": true
+    'has_next': true
     }
 
     **Example response on error:**
 
     {
-        "error": "Invalid input for pages or items per page"
+        'error': 'Invalid input for pages or items per page'
     }
     """
 
@@ -67,8 +75,10 @@ def get_posts(request):
         pages, items_per_page = int(pages), int(items_per_page)
 
     except ValueError:
-        return Response({"error": "Invalid input for pages or items per page"},
-                        status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'error': 'Invalid input for pages or items per page'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
     posts, has_next = get_all_posts(pages, items_per_page)
 
@@ -109,21 +119,21 @@ def submit_post(request):
     **Example response on success:**
 
     {
-    "id": 1,
-    "author": {
-        "id": 1,
-        "email": "some_user@mail.com"
+    'id': 1,
+    'author': {
+        'id': 1,
+        'email': 'some_user@mail.com'
     },
-    "content": "Some content.",
-    "created_at": "2024-07-02T20:53:34.148889Z",
-    "liked_users": []
+    'content': 'Some content.',
+    'created_at': '2024-07-02T20:53:34.148889Z',
+    'liked_users': []
     }
 
     **Example response on error:**
 
     {
-        "title": ["This field is required."],
-        "content": ["This field is required."]
+        'title': ['This field is required.'],
+        'content': ['This field is required.']
     }
     """
 
@@ -157,24 +167,22 @@ def switch_like(request, post_id):
     **Example response on success:**
 
     {
-    "Post liked"
+    'Post liked'
     }
 
     **Example response on error:**
 
     {
-    "error": "Post not found"
+    'error': 'Post not found'
     }
     """
 
     try:
         res = switch_like_status(post_id, request.user)
-        return Response(res,
-                        status=status.HTTP_201_CREATED)
+        return Response(res, status=status.HTTP_201_CREATED)
 
     except PostNotFoundException as e:
-        return Response({'error': e.message},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': e.message}, status=status.HTTP_404_NOT_FOUND)
 
 
 @swagger_auto_schema(method='delete', tags=['posts'])
@@ -209,13 +217,13 @@ def delete_post(request, post_id):
     **Example response on error (post not found):**
 
     {
-        "error": "Post not found"
+        'error': 'Post not found'
     }
 
     **Example response on error (unauthorized access):**
 
     {
-    "error": "Owner required"
+    'error': 'Owner required'
     }
     """
 
@@ -224,9 +232,7 @@ def delete_post(request, post_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     except PostNotFoundException as e:
-        return Response({'error': e.message},
-                        status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': e.message}, status=status.HTTP_404_NOT_FOUND)
 
     except UnauthorizedAccessException as e:
-        return Response({'error': e.message},
-                        status=status.HTTP_403_FORBIDDEN)
+        return Response({'error': e.message}, status=status.HTTP_403_FORBIDDEN)

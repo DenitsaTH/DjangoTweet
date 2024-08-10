@@ -1,20 +1,21 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login
-from rest_framework.decorators import api_view, schema
+from rest_framework.decorators import api_view
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from drf_yasg.utils import swagger_auto_schema
-import logging
 
 from authentication.services import GoogleLoginFlowService
 from users.models import User
 
 
-@swagger_auto_schema(method='get', tags=['public'], operation_summary="Redirects to Google OAuth2 login")
+@swagger_auto_schema(
+    method='get', tags=['public'], operation_summary='Redirects to Google OAuth2 login'
+)
 @api_view(['GET'])
 def google_login_redirect_api(request, *args, **kwargs):
-    '''
+    """
     get:
     Redirects to Google OAuth2 login
 
@@ -33,7 +34,7 @@ def google_login_redirect_api(request, *args, **kwargs):
 
     The server responds with a redirect status code (302) and the `Location` header set
     to the Google OAuth2 authorization URL. The response body is empty as it is a redirect.
-    '''
+    """
 
     google_login_flow = GoogleLoginFlowService()
 
@@ -56,7 +57,7 @@ class GoogleLoginInputSerializer(serializers.Serializer):
 
 @api_view(['GET'])
 def google_login_api(request, *args, **kwargs):
-    '''
+    """
     get:
     Google login callback
 
@@ -76,24 +77,26 @@ def google_login_api(request, *args, **kwargs):
     **Responses:**
     - 200 OK: Successful login. Returns a token for authenticated interactions and decoded ID token.
     - 400 Bad Request: Invalid request parameters or CSRF check failure.
-    '''
+    """
 
-    session_id = request.session.session_key
+    # session_id = request.session.session_key
 
     input_serializer = GoogleLoginInputSerializer(data=request.GET)
     input_serializer.is_valid(raise_exception=True)
 
     validated_data = input_serializer.validated_data
 
-    code = validated_data.get("code")
-    error = validated_data.get("error")
-    state = validated_data.get("state")
+    code = validated_data.get('code')
+    error = validated_data.get('error')
+    state = validated_data.get('state')
 
     if error is not None:
         return Response({'error': error}, status=status.HTTP_400_BAD_REQUEST)
 
     if code is None or state is None:
-        return Response({'error': 'Code and state required.'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'error': 'Code and state required.'}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     # Verify the state parameter against the value stored in the session to prevent CSRF attacks
     # session_state = request.session['google_oauth2_state']
@@ -118,7 +121,10 @@ def google_login_api(request, *args, **kwargs):
     user = get_object_or_404(User, email=user_email)
 
     if user.is_sandboxed or user.is_deleted:
-        return Response({'error': f'User with email {user_email} is not found or inactive.'}, status=status.HTTP_404_NOT_FOUND)
+        return Response(
+            {'error': f'User with email {user_email} is not found or inactive.'},
+            status=status.HTTP_404_NOT_FOUND,
+        )
 
     # Log the user in
     login(request, user)

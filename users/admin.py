@@ -2,7 +2,6 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
 from .models import User
-from posts.models import Post
 
 
 class CustomUserAdmin(UserAdmin):
@@ -14,8 +13,7 @@ class CustomUserAdmin(UserAdmin):
     @admin.action(description='Mark selected users as active')
     def mark_as_active(self, request, queryset):
         users_activated = queryset.update(is_sandboxed=False)
-        self.message_user(
-            request, f"{users_activated} users marked as active.")
+        self.message_user(request, f'{users_activated} users marked as active.')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

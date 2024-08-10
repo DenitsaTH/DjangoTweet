@@ -4,8 +4,7 @@ from posts.models import Post
 
 
 class CustomPostsAdmin(admin.ModelAdmin):
-    list_display = ['id', 'content', 'created_at',
-                    'is_deleted', 'deleted_at', 'author']
+    list_display = ['id', 'content', 'created_at', 'is_deleted', 'deleted_at', 'author']
     list_filter = ['is_deleted']
     search_fields = ['id', 'author', 'content']
     actions = ['restore_posts']
@@ -13,7 +12,7 @@ class CustomPostsAdmin(admin.ModelAdmin):
     @admin.action(description='Restore deleted posts')
     def restore_posts(self, request, queryset):
         posts_restored = queryset.update(is_deleted=False)
-        self.message_user(request, f"{posts_restored} posts restored.")
+        self.message_user(request, f'{posts_restored} posts restored.')
 
     def get_queryset(self, request):
         qs = super().get_queryset(request)

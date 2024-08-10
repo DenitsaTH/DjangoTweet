@@ -18,8 +18,8 @@ class UserProfileSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'description']
 
 
-'''Serializer instead of ModelSerializer - no need for the Meta class, only one attribute is needed (prof. picture),
-not an entire representation of the Django db Model'''
+"""Serializer instead of ModelSerializer - no need for the Meta class, only one attribute is needed (prof. picture),
+not an entire representation of the Django db Model"""
 
 
 class ProfilePictureSerializer(serializers.Serializer):
@@ -37,7 +37,6 @@ class PostSerializer(serializers.ModelSerializer):
 
 
 class SubmitPostSerialized(serializers.ModelSerializer):
-
     class Meta:
         model = Post
         fields = ['content']

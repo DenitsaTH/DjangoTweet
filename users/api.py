@@ -9,13 +9,17 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from rest_framework.parsers import MultiPartParser, FormParser
 
-from users.services import create_user, get_total_likes_and_posts, upload_profile_picture
+from users.services import (
+    create_user,
+    get_total_likes_and_posts,
+    upload_profile_picture,
+)
 
 
 @swagger_auto_schema(method='get', auto_schema=None)
 @api_view(['GET'])
 def home_page(request):
-    return HttpResponse("Welcome:)")
+    return HttpResponse('Welcome:)')
 
 
 @swagger_auto_schema(method='post', tags=['public'], request_body=UserSerializer)
@@ -38,12 +42,12 @@ def register(request):
 
     **Example response on success:**
 
-    "Registration successful! Login to continue"
+    'Registration successful! Login to continue'
 
     **Example response on failure:**
 
     {
-        "email": ["Enter a valid email address."]
+        'email': ['Enter a valid email address.']
     }
     """
 
@@ -54,8 +58,10 @@ def register(request):
         password = serializer.validated_data['password']
 
         if create_user(serializer, email, password):
-            return Response('Registration successful! Login to continue',
-                            status=status.HTTP_201_CREATED)
+            return Response(
+                'Registration successful! Login to continue',
+                status=status.HTTP_201_CREATED,
+            )
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -81,7 +87,7 @@ def logout(request):
     **Example response on success:**
 
     {
-        "detail": "Logout successful."
+        'detail': 'Logout successful.'
     }
     """
 
@@ -93,10 +99,15 @@ def logout(request):
         # clear session data
         if hasattr(request, 'session'):
             request.session.flush()
-        return Response({'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK)
+        return Response(
+            {'detail': 'Successfully logged out.'}, status=status.HTTP_200_OK
+        )
 
     except Exception as e:
-        return Response({'detail': f'Failed to log out: {str(e)}'}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {'detail': f'Failed to log out: {str(e)}'},
+            status=status.HTTP_400_BAD_REQUEST,
+        )
 
 
 @swagger_auto_schema(method='put', tags=['users'], request_body=UserProfileSerializer)
@@ -107,8 +118,8 @@ def update_profile(request):
     put:
     Update profile information of the currently authenticated user
 
-    This endpoint allows the authenticated user to update their names and/or 
-    description. The request can include partial data to update only specific 
+    This endpoint allows the authenticated user to update their names and/or
+    description. The request can include partial data to update only specific
     fields. Upon successful update, the updated user profile object is returned.
 
     **Parameters**:
@@ -125,17 +136,18 @@ def update_profile(request):
     **Example response on success:**
 
     {
-        "id": 1,
-        "first_name": "new_first_name",
-        "last_name": "new_last_name",
-        "description": "Updated description"
+        'id': 1,
+        'first_name': 'new_first_name',
+        'last_name': 'new_last_name',
+        'description': 'Updated description'
     }
     """
 
     user_profile = request.user
 
     serializer = UserProfileSerializer(
-        instance=user_profile, data=request.data, partial=True)
+        instance=user_profile, data=request.data, partial=True
+    )
 
     if serializer.is_valid():
         serializer.save()
@@ -149,12 +161,9 @@ def update_profile(request):
     tags=['users'],
     manual_parameters=[
         openapi.Parameter(
-            'profile_picture',
-            openapi.IN_FORM,
-            type=openapi.TYPE_FILE,
-            required=True
+            'profile_picture', openapi.IN_FORM, type=openapi.TYPE_FILE, required=True
         ),
-    ]
+    ],
 )
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
@@ -183,15 +192,15 @@ def update_profile_picture(request):
     **Example response:**
 
       {
-          "id": 1,
-          "email": "user@example.com",
-          "profile_picture": "http://example.com/media/profiles/user123/profile.jpg",
+          'id': 1,
+          'email': 'user@example.com',
+          'profile_picture': 'http://example.com/media/profiles/user123/profile.jpg',
       }
 
     **Example response on error:**
 
     {
-        "profile_picture": ["Upload a valid image file."]
+        'profile_picture': ['Upload a valid image file.']
     }
     """
 
@@ -200,8 +209,7 @@ def update_profile_picture(request):
 
     if serializer.is_valid():
         try:
-            upload_profile_picture(
-                request.data.get('profile_picture'), user)
+            upload_profile_picture(request.data.get('profile_picture'), user)
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except ValidationError as e:
             return Response({'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
@@ -232,12 +240,11 @@ def get_user_likes_and_posts(request):
     **Example response on success:**
 
     {
-        "Total likes": 123,
-        "Total posts created": 45
+        'Total likes': 123,
+        'Total posts created': 45
     }
     """
 
     likes, posts = get_total_likes_and_posts(request.user)
 
-    return Response({"Total likes": likes,
-                     "Total posts created": posts})
+    return Response({'Total likes': likes, 'Total posts created': posts})

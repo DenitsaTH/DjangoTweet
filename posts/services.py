@@ -6,7 +6,6 @@ from exceptions import PostNotFoundException, UnauthorizedAccessException
 
 
 def get_post(id) -> Post | None:
-
     try:
         post = Post.objects.get(id=id)
         return post
@@ -19,7 +18,6 @@ def is_user_owner(post, user) -> bool:
 
 
 def switch_like_status(post_id, user) -> str:
-
     post = get_post(post_id)
 
     if not post:
@@ -48,7 +46,6 @@ def remove_post(post_id, user) -> None:
 
 
 def get_all_posts(pages, items_per_page) -> tuple[list[Post], bool]:
-
     # QuerySets are lazy - no db interaction is made until they are evaluated
     all_posts = Post.objects.filter(is_deleted=False).order_by('-id')
     paginator = Paginator(all_posts, items_per_page)

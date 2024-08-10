@@ -17,10 +17,9 @@ from django_project.env import env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-BASE_BACKEND_URL = env.str("DJANGO_BASE_BACKEND_URL",
-                           default="http://localhost:8000")
+BASE_BACKEND_URL = env.str('DJANGO_BASE_BACKEND_URL', default='http://localhost:8000')
 
-SECRET_KEY = env.str('SECRET_KEY', default="")
+SECRET_KEY = env.str('SECRET_KEY', default='')
 
 # Switch to False for production
 DEBUG = True
@@ -47,18 +46,16 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_celery_results',
-
     # Third-party Apps
     'corsheaders',
     'rest_framework',
     'rest_framework.authtoken',
     'drf_yasg',
     'background_task',
-
     # Custom Apps
     'users',
     'posts',
-    'authentication'
+    'authentication',
 ]
 
 # Django REST Framework configuration
@@ -222,11 +219,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 SWAGGER_SETTINGS = {
     'SECURITY_DEFINITIONS': {
-        'api_key': {
-            'type': 'apiKey',
-            'in': 'header',
-            'name': 'Authorization'
-        }
+        'api_key': {'type': 'apiKey', 'in': 'header', 'name': 'Authorization'}
     },
     'USE_SESSION_AUTH': False,
     'JSON_EDITOR': True,
@@ -235,11 +228,9 @@ SWAGGER_SETTINGS = {
 
 # Google Authentication
 
-GOOGLE_OAUTH2_CLIENT_ID = env.str("DJANGO_GOOGLE_OAUTH2_CLIENT_ID", default="")
-GOOGLE_OAUTH2_CLIENT_SECRET = env.str(
-    "DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET", default="")
-GOOGLE_OAUTH2_PROJECT_ID = env.str(
-    "DJANGO_GOOGLE_OAUTH2_PROJECT_ID", default="")
+GOOGLE_OAUTH2_CLIENT_ID = env.str('DJANGO_GOOGLE_OAUTH2_CLIENT_ID', default='')
+GOOGLE_OAUTH2_CLIENT_SECRET = env.str('DJANGO_GOOGLE_OAUTH2_CLIENT_SECRET', default='')
+GOOGLE_OAUTH2_PROJECT_ID = env.str('DJANGO_GOOGLE_OAUTH2_PROJECT_ID', default='')
 
 
 # Session Management Settings
