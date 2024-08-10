@@ -80,7 +80,7 @@ def google_login_api(request, *args, **kwargs):
     - 400 Bad Request: Invalid request parameters or CSRF check failure.
     """
 
-    # session_id = request.session.session_key
+    # session_id = request.COOKIES[settings.SESSION_COOKIE_NAME]
 
     input_serializer = GoogleLoginInputSerializer(data=request.GET)
     input_serializer.is_valid(raise_exception=True)
@@ -100,12 +100,12 @@ def google_login_api(request, *args, **kwargs):
         )
 
     # Verify the state parameter against the value stored in the session to prevent CSRF attacks
-    # session_state = request.session['google_oauth2_state']
+    # session_state = request.session.get("google_oauth2_state")
 
     # if session_state is None:
     #     return Response({'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST)
 
-    # del request.session['google_oauth2_state']
+    # # del request.session['google_oauth2_state']
 
     # if state != session_state:
     #     return Response({'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST)
@@ -115,7 +115,6 @@ def google_login_api(request, *args, **kwargs):
 
     google_tokens = google_login_flow.get_tokens(code=code)
     id_token_decoded = google_tokens.decode_id_token()
-    # user_info = google_login_flow.get_user_info(google_tokens=google_tokens)
 
     # Retrieve the user
     user_email = id_token_decoded['email']
@@ -136,7 +135,6 @@ def google_login_api(request, *args, **kwargs):
     result = {
         'token': user_token.key,
         'id_token_decoded': id_token_decoded,
-        # 'user_info': user_info
     }
 
     return Response(result)

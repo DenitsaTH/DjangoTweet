@@ -99,7 +99,9 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # CORS settings
 
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ['*']
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8000',
+]
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -236,14 +238,10 @@ GOOGLE_OAUTH2_PROJECT_ID = env.str('DJANGO_GOOGLE_OAUTH2_PROJECT_ID', default=''
 # Session Management Settings
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-SESSION_COOKIE_NAME = 'sessionid'
+SESSION_COOKIE_NAME = 'mysessioncookie'
 SESSION_COOKIE_AGE = 86400  # 1 day
-SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
-SESSION_COOKIE_SECURE = False  # Set to True in production to use HTTPS
-SESSION_COOKIE_SAMESITE = 'None'
+# SESSION_COOKIE_HTTPONLY = True  # Helps prevent JavaScript access to cookies
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
-SESSION_SAVE_EVERY_REQUEST = True
-
-# CSRF Settings
-CSRF_COOKIE_SAMESITE = 'None'
-CSRF_USE_SESSIONS = False
+# SESSION_SAVE_EVERY_REQUEST = True
+# SESSION_COOKIE_PATH = 'http://localhost:8000/google-oauth2/login/callback/'
+# SESSION_COOKIE_DOMAIN  = 'http://127.0.0.1:8000/api/v1/swagger/schema/'
