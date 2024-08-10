@@ -171,4 +171,4 @@ celerybeat-schedule.dir
 .vscode
 db.sqlite3
 
-successful_login.png
+.VSCodeCounter
