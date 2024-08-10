@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, schema
 from rest_framework import serializers, status
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -56,6 +56,7 @@ class GoogleLoginInputSerializer(serializers.Serializer):
 
 
 @api_view(['GET'])
+@schema(None)
 def google_login_api(request, *args, **kwargs):
     """
     get:
