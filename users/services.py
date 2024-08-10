@@ -44,7 +44,7 @@ def upload_profile_picture(profile_picture, user) -> None:
 
 def get_total_likes_and_posts(user) -> tuple[int]:
     user_id = user.id
-    all_user_posts = Post.objects.filter(author_id=user_id)
+    all_user_posts = Post.objects.filter(author_id=user_id, is_deleted=False)
     all_user_posts_likes = all_user_posts.aggregate(total_likes=Sum('likes'))
 
     return all_user_posts_likes, all_user_posts.count()
