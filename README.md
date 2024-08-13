@@ -44,6 +44,9 @@ pip install -r requirements.txt
 
 ```
 python manage.py makemigrations
+```
+
+```
 python manage.py migrate
 ```
 
@@ -70,7 +73,7 @@ python manage.py runserver
         * Upload or change profile picture
         * Retrieve user's posts and accumulated likes of all user's posts
         * Logout
-  
+
     - **Features, related to posts:**
         * Submit a post
         * Retrieve all posts (shows last 20 posts by default)
