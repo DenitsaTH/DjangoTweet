@@ -17,7 +17,7 @@ from django_project.env import env
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-BASE_BACKEND_URL = env.str('DJANGO_BASE_BACKEND_URL', default='http://localhost:8000')
+BASE_BACKEND_URL = env.str('DJANGO_BASE_BACKEND_URL', default='http://127.0.0.1:8000')
 
 SECRET_KEY = env.str('SECRET_KEY', default='')
 
@@ -199,13 +199,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
-
-USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 
