@@ -107,19 +107,19 @@ def google_login_api(request, *args, **kwargs):
     # print("All session data:", list(all_session_data))
     # print("Cookies:", request.COOKIES)
 
-    # session_state = request.session.get('google_oauth2_state')
+    session_state = request.session.get('google_oauth2_state')
 
-    # if session_state is None:
-    #     return Response(
-    #         {'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST
-    #     )
+    if session_state is None:
+        return Response(
+            {'error': 'CSRF check failed.'}, status=status.HTTP_400_BAD_REQUEST
+        )
 
-    # del request.session['google_oauth2_state']
+    del request.session['google_oauth2_state']
 
-    # if state != session_state:
-    #     return Response(
-    #         {'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST
-    #     )
+    if state != session_state:
+        return Response(
+            {'error': 'CSRF check failed'}, status=status.HTTP_400_BAD_REQUEST
+        )
 
     # Use GoogleLoginFlowService to exchange the authorization code for tokens and fetch user information
     google_login_flow = GoogleLoginFlowService()
