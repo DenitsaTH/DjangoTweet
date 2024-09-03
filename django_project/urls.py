@@ -31,6 +31,10 @@ urlpatterns = [
         include('users.urls', namespace='users'),
     ),
     path(
+        '',
+        include('forecast.urls', namespace='forecast'),
+    ),
+    path(
         'api/v1/swagger/schema/',
         schema_view.with_ui('swagger', cache_timeout=0),
         name='schema-swagger',

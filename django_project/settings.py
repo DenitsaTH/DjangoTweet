@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'users',
     'posts',
     'authentication',
+    'forecast',
 ]
 
 # Django REST Framework configuration
