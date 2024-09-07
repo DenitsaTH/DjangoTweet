@@ -36,7 +36,9 @@ from forecast.services import get_forecast, get_page_content
 def get_weather_forecast(request):
     """
     get:
-    Retrieve the current weather condition for a specified city in Bulgaria.
+    Retrieve the current weather condition for a specified city in Bulgaria via web scraping.
+
+    **Source:** https://www.sinoptik.bg/
 
     **Query Parameters:**
 
