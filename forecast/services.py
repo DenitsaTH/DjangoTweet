@@ -7,7 +7,7 @@ CITY_IDS = {
     'varna': '100726050',
     'burgas': '100732770',
     'ruse': '100727523',
-    'stara-zagora': '100726848',
+    'starazagora': '100726848',
     'pleven': '100728203',
     'dobrich': '100726418',
     'shumen': '100727233',
@@ -26,7 +26,7 @@ def get_page_content(city: str):
 
 def get_forecast(soup: BeautifulSoup):
     curr_temp_title, curr_temp_value = (
-        'Температура:',
+        'Температура',
         soup.find('span', {'class': 'wfCurrentTemp'}).string,
     )
     details = soup.find_all('span', class_='wfNonCurrentValue')[::-1]
@@ -36,16 +36,11 @@ def get_forecast(soup: BeautifulSoup):
     }
 
     for wrapper in soup.find_all('div', class_='wfCurrentWrapper'):
-        heading = wrapper.find('span', class_='wfCurrentHeading').text.strip()
+        heading = wrapper.find('span', class_='wfCurrentHeading').text.strip()[:-1]
         value = wrapper.find('span', class_='wfCurrentValue').text.strip()
         data[heading] = value
         if not data[heading]:
             data[heading] = details[-1].get_text(separator=' ', strip=True)
             details.pop()
 
-    res = ''
-
-    for heading, value in data.items():
-        res += f'{heading}: {value}'
-
-    return res
+    return data
