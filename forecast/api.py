@@ -51,8 +51,9 @@ def get_weather_forecast(request):
 
     """
 
-    city = request.GET.get('city').lower()
-    city = ''.join(city.split())
+    city = request.GET.get('city')
+    city = ''.join(city.split()).lower() if city else 'sofia'
+
     soup = get_page_content(city)
     result = get_forecast(soup)
 
