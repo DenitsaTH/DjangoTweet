@@ -36,8 +36,21 @@ from forecast.services import get_forecast, get_page_content
 def get_weather_forecast(request):
     """
     get:
+    Retrieve the current weather condition for a specified city in Bulgaria.
+
+    **Query Parameters:**
+
+    - `city` (string, required): Name of the city. Must be one of the following:
+      Sofia, Plovdiv, Varna, Burgas, Ruse, Stara Zagora, Pleven, Dobrich, Shumen, Montana.
+      Default is Sofia.
+
+    **Responses:**
+
+    - **200 OK**: Weather data retrieved successfully.
+    - **401 Unauthorized**: Authentication credentials were not provided or are invalid.
 
     """
+
     city = request.GET.get('city').lower()
     city = ''.join(city.split())
     soup = get_page_content(city)
