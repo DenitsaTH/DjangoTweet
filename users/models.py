@@ -14,3 +14,10 @@ class User(AbstractUser):
 
     # when creating a user via the createsuperuser management command
     REQUIRED_FIELDS = ['username']
+
+
+class UserActivity(models.Model):
+    user_id = models.IntegerField()
+    username = models.CharField(max_length=50)
+    action = models.TextField(max_length=500)
+    timestamp = models.DateTimeField()
