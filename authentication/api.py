@@ -45,10 +45,6 @@ def google_login_redirect_api(request, *args, **kwargs):
     request.session.modified = True
     request.session.save()
 
-    # all_session_data = request.session.items()
-    # print("All session data:", list(all_session_data))
-    # print("Cookies:", request.COOKIES)
-
     # redirect to the obtained Google authorization url
     return redirect(authorization_url)
 
@@ -102,10 +98,6 @@ def google_login_api(request, *args, **kwargs):
         )
 
     # Verify the state parameter against the value stored in the session to prevent CSRF attacks
-
-    # all_session_data = request.session.items()
-    # print("All session data:", list(all_session_data))
-    # print("Cookies:", request.COOKIES)
 
     session_state = request.session.get('google_oauth2_state')
 

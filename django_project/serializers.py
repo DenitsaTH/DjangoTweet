@@ -36,7 +36,7 @@ class PostSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'author', 'created_at', 'liked_users']
 
 
-class SubmitPostSerialized(serializers.ModelSerializer):
+class SubmitPostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ['content']
