@@ -17,7 +17,6 @@ class User(AbstractUser):
 
 
 class UserActivity(models.Model):
-    user_id = models.IntegerField()
-    username = models.CharField(max_length=50)
+    username = models.CharField(max_length=50, blank=True, null=True)
     action = models.TextField(max_length=500)
     timestamp = models.DateTimeField()

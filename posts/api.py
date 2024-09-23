@@ -5,9 +5,10 @@ from rest_framework.permissions import IsAuthenticated
 from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 
-from django_project.serializers import PostSerializer, SubmitPostSerialized
+from django_project.serializers import PostSerializer, SubmitPostSerializer
 from posts.services import get_all_posts, remove_post, switch_like_status
 from exceptions import PostNotFoundException, UnauthorizedAccessException
+from decorators import log_activity
 
 
 @swagger_auto_schema(
@@ -93,9 +94,10 @@ def get_posts(request):
     return Response(data)  # Response() handles JSON rendering
 
 
-@swagger_auto_schema(method='post', tags=['posts'], request_body=SubmitPostSerialized)
+@swagger_auto_schema(method='post', tags=['posts'], request_body=SubmitPostSerializer)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
+@log_activity
 def submit_post(request):
     """
     post:
@@ -149,6 +151,7 @@ def submit_post(request):
 @swagger_auto_schema(method='put', tags=['posts'])
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
+@log_activity
 def switch_like(request, post_id):
     """
     put:
